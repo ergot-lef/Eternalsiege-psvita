@@ -35,7 +35,7 @@ static inline float nz() { return s_ar.f() * 2 - 1; }
 
 struct OnePole { float z = 0; float lp(float x, float a) { z += a * (x - z); return z; } };
 struct BiquadBP {
-    float b0, b1, b2, a1, a2, x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+    float b0 = 0, b1 = 0, b2 = 0, a1 = 0, a2 = 0, x1 = 0, x2 = 0, y1 = 0, y2 = 0;
     void set(float f, float q) {
         float w = 2 * PI * f / SR, al = sinf(w) / (2 * q), c = cosf(w);
         float a0 = 1 + al;
