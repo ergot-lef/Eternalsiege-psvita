@@ -318,9 +318,10 @@ void lightsApply() {
             glLightfv(L, GL_POSITION, pos);
             glLightfv(L, GL_DIFFUSE, dif);
             glLightfv(L, GL_AMBIENT, zero);
-            glLightf(L, GL_CONSTANT_ATTENUATION, 1.0f);
-            glLightf(L, GL_LINEAR_ATTENUATION, 0.0f);
-            glLightf(L, GL_QUADRATIC_ATTENUATION, 1.0f / (c.radius * c.radius * 0.35f));
+            float att0 = 1.0f, att1 = 0.0f, att2 = 1.0f / (c.radius * c.radius * 0.35f);
+            glLightfv(L, GL_CONSTANT_ATTENUATION, &att0);
+            glLightfv(L, GL_LINEAR_ATTENUATION, &att1);
+            glLightfv(L, GL_QUADRATIC_ATTENUATION, &att2);
         } else {
             glDisable(L);
         }
