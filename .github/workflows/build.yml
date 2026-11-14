@@ -1,0 +1,65 @@
+name: Compilation VPK
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VITASDK: /home/runner/vitasdk
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache du VitaSDK
+        id: cache-sdk
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/vitasdk
+          key: vitasdk-${{ runner.os }}-v1
+
+      - name: Installation du VitaSDK
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 https://github.com/vitasdk/vdpm
+          cd vdpm
+          ./bootstrap-vitasdk.sh
+          export PATH=$VITASDK/bin:$PATH
+          ./install-all.sh || true
+          ls $VITASDK/arm-vita-eabi/lib | grep -i -E "vitagl|vitashark|mathneon|shacc" || true
+
+      - name: PATH
+        run: echo "$VITASDK/bin" >> $GITHUB_PATH
+
+      - name: Textures photo (Poly Haven, CC0)
+        run: |
+          pip install --quiet pillow
+          python3 tools/fetch_textures.py build_tex
+
+      - name: Compilation
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j4
+
+      - name: Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EternalSiege-vpk
+          path: build/EternalSiege.vpk
+
+      - name: Publication (version de développement)
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete nightly --yes --cleanup-tag || true
+          gh release create nightly build/EternalSiege.vpk \
+            --prerelease \
+            --title "Eternal Siege Vita - dernière version" \
+            --notes "VPK compilé automatiquement depuis le commit ${GITHUB_SHA::7}. À installer avec VitaShell." \
+            --target "$GITHUB_SHA"
