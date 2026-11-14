@@ -672,6 +672,7 @@ static void push(int id, float vl, float vr, float pitch) {
     if (nh == s_qTail) return;
     Cmd& c = s_queue[s_qHead];
     c.id = id; c.vl = vl; c.vr = vr; c.step = (float)SR / OUT_SR * pitch;
+    __sync_synchronize();
     s_qHead = nh;
 }
 

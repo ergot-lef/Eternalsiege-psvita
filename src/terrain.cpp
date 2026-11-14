@@ -210,7 +210,7 @@ void waterDraw(float t) {
 // ---------------------------------------------------------------- Herbe
 void grassDraw(float t, float wind) {
     Batch& b = g_batches[BA_GRASS];
-    const float SP = 1.9f, R = 24.0f;
+    const float SP = 1.9f, R = 10.0f + 14.0f * g_quality;
     vec3 c = g_cam.pos;
     int i0 = (int)floorf((c.x - R) / SP), i1 = (int)floorf((c.x + R) / SP);
     int j0 = (int)floorf((c.z - R) / SP), j1 = (int)floorf((c.z + R) / SP);

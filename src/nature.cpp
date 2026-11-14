@@ -159,7 +159,7 @@ void treesDraw(float tm, float wind) {
         vec3 center = t.pos + vec3(0, t.height * 0.5f, 0);
         if (!sphereVisible(center, t.height * 0.7f + (t.state ? t.height : 0))) continue;
         float d = length(center - g_cam.pos);
-        if (d > 170) continue;
+        if (d > 95 + 75 * g_quality) continue;
         Mat4 m;
         if (t.state == 0) {
             float sw = sinf(tm * 1.3f + t.phase) * (0.008f + wind * 0.03f);
@@ -168,7 +168,7 @@ void treesDraw(float tm, float wind) {
         } else {
             m = Mat4::translate(t.pos) * Mat4::rotY(t.fallYaw) * Mat4::rotX(t.fallAng);
         }
-        bool lod = d > 70;
+        bool lod = d > 40 + 30 * g_quality;
         float ch = 1 - t.charred * 0.8f;
         Color trunkC = rgbaf(0.85f * ch, 0.8f * ch, 0.75f * ch);
         emitCylinder(bark, m * Mat4::translate(vec3(0, -0.4f, 0)), t.radius, t.height * (t.kind ? 0.85f : 0.6f), lod ? 4 : 7, trunkC, false, 1, 0.35f);

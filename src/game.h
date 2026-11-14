@@ -458,4 +458,6 @@ void hudDraw();
 void menuUpdateDraw();
 
 extern float g_time;      // temps réel écoulé (s)
+extern float g_quality;   // 0..1, ajusté selon la fluidité
+extern float g_fps;
 extern float g_dtReal;

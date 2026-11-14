@@ -2,14 +2,16 @@
 #include "game.h"
 #include <vitaGL.h>
 
-// tas de 200 Mo pour le jeu (newlib)
+// tas de 96 Mo pour le jeu (newlib) ; le reste va à vitaGL
 extern "C" {
-int _newlib_heap_size_user = 200 * 1024 * 1024;
+int _newlib_heap_size_user = 96 * 1024 * 1024;
 }
 
 Rng g_rng(0xC0FFEE);
 float g_time = 0;
 float g_dtReal = 0;
+float g_quality = 1.0f;
+float g_fps = 30;
 
 static void renderWorld() {
     Player& p = g_player;
@@ -77,6 +79,10 @@ int main() {
         if (dt > 0.05f) dt = 0.05f;
         if (dt < 0.001f) dt = 0.001f;
         g_dtReal = dt;
+        // qualité adaptative : on allège l'affichage si l'image ralentit
+        g_fps = lerpf(g_fps, 1.0f / fmaxf(dt, 0.001f), 0.05f);
+        if (g_fps < 24) g_quality = fmaxf(0.0f, g_quality - dt * 0.15f);
+        else if (g_fps > 29) g_quality = fminf(1.0f, g_quality + dt * 0.05f);
         inputUpdate();
         if (g_in.pressed & B_START) { g_game.paused = !g_game.paused; g_game.menuSel = 0; }
         if (!g_game.paused) {

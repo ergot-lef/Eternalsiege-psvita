@@ -385,7 +385,7 @@ void bodiesDraw() {
         float r = length(b.half);
         if (!sphereVisible(b.pos, r)) continue;
         float d = length(b.pos - g_cam.pos);
-        if (d > 110 || (r < 0.3f && d > 50)) continue;
+        if (d > 70 + 40 * g_quality || (r < 0.3f && d > 25 + 25 * g_quality)) continue;
         Mat4 m = Mat4::translate(b.pos) * b.rot;
         float ch = 1 - b.charred * 0.75f;
         Color c = scaleC(b.col, ch);

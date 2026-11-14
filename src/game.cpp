@@ -526,7 +526,8 @@ void menuUpdateDraw() {
         }
         snprintf(s, sizeof(s), "%s - An %d - Vague %d - Meilleure vague %d", g_eras[g.era].name, (int)g.year, g.wave, g.bestWave);
         drawText(480, 460, s, 1.5f, rgba(190, 190, 190), 1);
-        drawText(480, 490, "Le temps s'arrête quand la console est en veille.", 1.5f, rgba(150, 150, 150), 1);
+        snprintf(s, sizeof(s), "Le temps s'arrête quand la console est en veille.   %d img/s, détail %d%%", (int)(g_fps + 0.5f), (int)(g_quality * 100));
+        drawText(480, 490, s, 1.5f, rgba(150, 150, 150), 1);
     } else if (view == 1) {
         drawText(480, 110, "Chroniques des ères passées", 2.5f, rgba(240, 220, 170), 1);
         if (g.historyCount == 0) drawText(480, 180, "Le château n'est encore jamais tombé.", 2, rgba(200, 200, 200), 1);

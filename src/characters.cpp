@@ -827,7 +827,7 @@ static void drawChar(Character& c, int idx) {
     if (!sphereVisible(center, 1.6f)) return;
     float dist = length(center - g_cam.pos);
     if (dist > 140) return;
-    bool lod = dist > 45;
+    bool lod = dist > 25 + 20 * g_quality;
     Mat4 m;
     if (c.state == CS_DEAD) m = Mat4::translate(c.pos) * Mat4::rotAxis(c.fallAxis, c.fallAng) * Mat4::rotY(c.yaw);
     else m = Mat4::translate(c.pos) * Mat4::rotY(c.yaw);

@@ -39,6 +39,7 @@ void spawnParticle(int type, const vec3& p, const vec3& v, float size, float lif
     float dist2 = length2(d);
     if (dist2 > 120 * 120) return;
     if (dist2 > 30 * 30 && dot(d, g_cam.fwd) < 0) return;
+    if (g_quality < 0.5f && type != PT_TRACER && frand() > 0.5f + g_quality) return;
     Particle& q = s_parts[s_partNext];
     s_partNext = (s_partNext + 1) % MAX_PARTS;
     q.pos = p; q.vel = v; q.size = size; q.life = life; q.maxLife = life;
