@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/vitasdk
-          key: vitasdk-${{ runner.os }}-v1
+          key: vitasdk-${{ runner.os }}-v2
 
       - name: Installation du VitaSDK
         if: steps.cache-sdk.outputs.cache-hit != 'true'
@@ -30,7 +30,14 @@ jobs:
           cd vdpm
           ./bootstrap-vitasdk.sh
           export PATH=$VITASDK/bin:$PATH
-          ./install-all.sh || true
+          ls -la $VITASDK/bin | head -50
+          chmod +x $VITASDK/bin/* || true
+          vdpm --help || true
+          vdpm search gl || true
+          vdpm search shark || true
+          vdpm search neon || true
+          for p in vitagl vitaGL vitashark vitaShaRK mathneon; do vdpm install $p || true; done
+          vdpm list || true
           ls $VITASDK/arm-vita-eabi/lib | grep -i -E "vitagl|vitashark|mathneon|shacc" || true
 
       - name: PATH

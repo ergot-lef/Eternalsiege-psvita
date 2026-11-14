@@ -65,14 +65,14 @@ def pick(assets, prefer, keywords):
 
 
 def diffuse_url(files):
-    for key in ("Diffuse", "diffuse", "diff", "Color", "col"):
-        if key in files:
-            d = files[key]
-            for res in ("1k", "2k"):
-                if res in d:
-                    for fmt in ("jpg", "png"):
-                        if fmt in d[res]:
-                            return d[res][fmt]["url"]
+    keys = [k for k in files if k.lower() in ("diffuse", "diff", "color", "col", "albedo", "basecolor")]
+    for key in keys:
+        d = files[key]
+        for res in ("1k", "2k", "4k"):
+            if res in d:
+                for fmt in ("jpg", "png"):
+                    if fmt in d[res]:
+                        return d[res][fmt]["url"]
     return None
 
 
